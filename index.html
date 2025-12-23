@@ -70,35 +70,42 @@
         </div>
     </div>
 
-    <script>
-        function getWeather() {
-            const location = document.getElementById("locationInput").value;
+   <script>
+function getWeather() {
+    const location = document.getElementById("locationInput").value.trim();
 
-            if (location === "") {
-                alert("Please enter a location");
+    if (!location) {
+        alert("Please enter a city name");
+        return;
+    }
+
+    const apiKey = "ad6f245bec2f4a1eb2a170158252312";
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            // IMPORTANT: WeatherAPI error handling
+            if (data.error) {
+                alert("City not found. Try a valid city name.");
                 return;
             }
 
-            const apiKey = "ad6f245bec2f4a1eb2a170158252312";
-            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            document.getElementById("city").innerText =
+                `${data.location.name}, ${data.location.country}`;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("city").innerText =
-                        `📍 ${data.location.name}, ${data.location.country}`;
-
-                    document.getElementById("temp").innerText =
-                        `🌡️ Temperature: ${data.current.temp_c}°C`;
-                })
-                .catch(error => {
-                    alert("City not found!");
-                    console.error(error);
-                });
-        }
-    </script>
+            document.getElementById("temp").innerText =
+                `Temperature: ${data.current.temp_c} °C`;
+        })
+        .catch(err => {
+            alert("Network error. Try again.");
+            console.error(err);
+        });
+}
+</script>
 
 </body>
 </html>
+
 
 
