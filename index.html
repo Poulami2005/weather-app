@@ -80,7 +80,7 @@ function getWeather() {
     }
 
     const apiKey = "ad6f245bec2f4a1eb2a170158252312";
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+    const url = `https://api.allorigins.win/raw?url=https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
 
     fetch(url)
         .then(res => res.json())
@@ -106,6 +106,7 @@ function getWeather() {
 
 </body>
 </html>
+
 
 
 
