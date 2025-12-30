@@ -14,115 +14,144 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    overflow: hidden;
+    position: relative;
 }
 
-/* 🔥 FULL-WIDTH APP CONTAINER */
-.app-wrapper {
-    width: 90%;
-    max-width: 1100px;
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(18px);
-    border-radius: 28px;
-    padding: 40px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+/* 🌸 Soft background blobs to fill empty space */
+body::before,
+body::after {
+    content: "";
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    filter: blur(110px);
+    z-index: -1;
+}
+
+body::before {
+    top: 15%;
+    left: 12%;
+}
+
+body::after {
+    bottom: 12%;
+    right: 12%;
+}
+
+/* 🌦 Main Card */
+.weather-container {
+    width: 420px;
+    padding: 32px 26px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     color: #fff;
-}
-
-/* HEADER */
-.header {
     text-align: center;
-    margin-bottom: 30px;
+    animation: fadeUp 0.7s ease;
 }
 
-.header h2 {
+h2 {
+    margin-bottom: 18px;
     font-weight: 600;
 }
 
-/* SEARCH */
-.search {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-
-.search input {
-    width: 260px;
+/* Input */
+input {
+    width: 100%;
     padding: 14px;
     border-radius: 16px;
     border: none;
     outline: none;
+    font-size: 15px;
+    margin-bottom: 14px;
 }
 
-.search button {
-    padding: 14px 24px;
-    border-radius: 16px;
+/* Button */
+button {
+    width: 100%;
+    padding: 14px;
     border: none;
-    background: #fff;
+    border-radius: 16px;
+    background: #ffffff;
     color: #5a4fcf;
     font-weight: 600;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-/* MAIN WEATHER AREA */
-.weather-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 40px;
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-.left {
-    text-align: center;
+/* Weather Data */
+.weather-main {
+    margin-top: 26px;
+    display: none;
 }
 
 .weather-icon {
-    font-size: 100px;
+    font-size: 78px;
+    margin-bottom: 8px;
 }
 
 #temp {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 600;
 }
 
 #condition {
+    font-size: 16px;
     opacity: 0.9;
+    margin-top: 4px;
 }
 
-.right {
+#city {
+    font-size: 18px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Info Grid */
+.info-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 14px;
+    margin-top: 26px;
 }
 
 .info-box {
-    background: rgba(255,255,255,0.3);
-    padding: 20px;
-    border-radius: 18px;
-    text-align: center;
+    background: rgba(255,255,255,0.28);
+    padding: 14px 10px;
+    border-radius: 16px;
+    font-size: 13px;
 }
 
 .info-box span {
     display: block;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .weather-content {
-        grid-template-columns: 1fr;
-        text-align: center;
+/* Animation */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
     }
-
-    .right {
-        grid-template-columns: 1fr 1fr;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 </style>
@@ -130,26 +159,19 @@ body {
 
 <body>
 
-<div class="app-wrapper">
+<div class="weather-container">
+    <h2>🌦 Weather App</h2>
 
-    <div class="header">
-        <h2>🌦 Weather App</h2>
-    </div>
+    <input type="text" id="locationInput" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
 
-    <div class="search">
-        <input type="text" id="locationInput" placeholder="Enter city name">
-        <button onclick="getWeather()">Get Weather</button>
-    </div>
+    <div class="weather-main" id="weatherMain">
+        <div class="weather-icon" id="icon">🌤️</div>
+        <p id="temp"></p>
+        <p id="condition"></p>
+        <p id="city"></p>
 
-    <div class="weather-content" id="weatherMain" style="display:none;">
-        <div class="left">
-            <div class="weather-icon" id="icon">🌤️</div>
-            <p id="temp"></p>
-            <p id="condition"></p>
-            <p id="city"></p>
-        </div>
-
-        <div class="right">
+        <div class="info-grid">
             <div class="info-box">
                 Humidity
                 <span id="humidity">--%</span>
@@ -164,38 +186,57 @@ body {
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
 function getWeather() {
     const location = document.getElementById("locationInput").value.trim();
-    if (!location) return alert("Enter a city name");
+    if (!location) {
+        alert("Please enter a city name");
+        return;
+    }
 
     const apiKey = "db46f3816d4d4b9bb94171026252412";
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}`;
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
 
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            if (data.error) return alert("City not found");
+            if (data.error) {
+                alert("City not found");
+                return;
+            }
 
-            document.getElementById("weatherMain").style.display = "grid";
+            document.getElementById("weatherMain").style.display = "block";
 
-            temp.innerText = `${data.current.temp_c}°C`;
-            condition.innerText = data.current.condition.text;
-            city.innerText = `${data.location.name}, ${data.location.country}`;
-            humidity.innerText = `${data.current.humidity}%`;
-            wind.innerText = `${data.current.wind_kph} km/h`;
-            feels.innerText = `${data.current.feelslike_c}°C`;
+            document.getElementById("temp").innerText =
+                `${data.current.temp_c}°C`;
+
+            document.getElementById("condition").innerText =
+                data.current.condition.text;
+
+            document.getElementById("city").innerText =
+                `${data.location.name}, ${data.location.country}`;
+
+            document.getElementById("humidity").innerText =
+                `${data.current.humidity}%`;
+
+            document.getElementById("wind").innerText =
+                `${data.current.wind_kph} km/h`;
+
+            document.getElementById("feels").innerText =
+                `${data.current.feelslike_c}°C`;
 
             const text = data.current.condition.text.toLowerCase();
-            icon.innerText =
-                text.includes("rain") ? "🌧️" :
-                text.includes("cloud") ? "☁️" :
-                text.includes("sun") ? "☀️" :
-                "🌤️";
-        });
+            const icon = document.getElementById("icon");
+
+            if (text.includes("sun")) icon.innerText = "☀️";
+            else if (text.includes("rain")) icon.innerText = "🌧️";
+            else if (text.includes("cloud")) icon.innerText = "☁️";
+            else if (text.includes("snow")) icon.innerText = "❄️";
+            else icon.innerText = "🌤️";
+        })
+        .catch(() => alert("Network error"));
 }
 </script>
 
